@@ -1,8 +1,8 @@
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 
-import App from './App.vue'
-import router from './router'
+
+import router from './router';
 
 import PrimeVue from 'primevue/config';
 import '@primeuix/themes/aura';
@@ -15,6 +15,8 @@ import Button from 'primevue/button';
 
 
 import Tree from 'primevue/tree';
+
+import App from './App.vue';
 
 
 const app = createApp(App)

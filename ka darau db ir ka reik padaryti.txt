@@ -1,1 +1,15 @@
-baigiau darydamas mygtukus
+KA DB DARAU
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+> Mygtukus folder ir file elementams
+
+KA REIKIA PADARYTI
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+> MULTI selection pritaikyti kad veitu ir true ir checked su ctrl
+
+> deselection paspaudus bet kur kitur
+
+> Log In page
+
+> Elementu ilgis pervisa ekrana

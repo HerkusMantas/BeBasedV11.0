@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Failų medis</h1>
+    <h1>Be Based Data Base</h1>
     <FileTree />
   </div>
 </template>

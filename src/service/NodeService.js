@@ -9,6 +9,7 @@ export const NodeService = {
                 label: 'Folder',
                 icon: 'pi pi-fw pi-folder',
                 showButton: true,
+                class: 'root-folder',
                 children: [
                     {
                         key: `${idCounter++}`,           // Unikalus raktas
