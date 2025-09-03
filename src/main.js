@@ -11,6 +11,7 @@ import { definePreset } from '@primeuix/themes';
 // ...importas iš @primeuix/core pašalintas, nes paketas neegzistuoja...
 import 'primeicons/primeicons.css';
 import Button from 'primevue/button';
+import Sidebar from 'primevue/sidebar';
 
 
 

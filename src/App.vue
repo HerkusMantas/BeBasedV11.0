@@ -3,6 +3,54 @@
 </template>
 
 <style>
+
+/*--------------------TOP NAME CONTAINER--------------------*/
+
+.top-name-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 1rem;
+}
+
+
+.p-button .pi.pi-user { /*Profile Icon*/
+  color: rgb(190, 189, 189);
+  background-color: transparent;
+  font-size: 15px;
+  align-items: center;
+  
+}
+
+.p-button.p-component.p-button-icon-only.button-profile {
+  background: transparent;   /* mygtuko fonas */
+  border: 2px solid #374151;
+  border-radius: 50%;
+  width: 30px;      /* norimas plotis */  
+  height: 30px;     /* norimas aukštis */
+  min-width: 30px;  /* kad neišsitemptų */
+  max-width: 30px;  /* kad neišsitemptų */
+}
+
+.p-button .pi.pi-cog { /*Profile Icon*/
+  color: rgb(190, 189, 189);
+  background-color: transparent;
+  font-size: 15px;
+  align-items: center;
+}
+
+.p-button.p-component.p-button-icon-only.button-cog {
+  background: transparent;   /* mygtuko fonas */
+  border: 2px solid #374151;
+  border-radius: 50%;
+  width: 30px;      /* norimas plotis */  
+  height: 30px;     /* norimas aukštis */
+  min-width: 30px;  /* kad neišsitemptų */
+  max-width: 30px;  /* kad neišsitemptų */
+}
+
+/*--------------------TREE NODE STYLES--------------------*/
+
 .p-tree-node-content.p-tree-node-selectable {
   display: flex !important;
   width: auto !important;
@@ -42,6 +90,7 @@
     padding: 0px 0px !important; 
     width: auto !important;
     font-size: 0.875rem !important;
+    background: blue;
 }
 .p-button .pi.pi-trash,
 .p-button .pi.pi-file-plus,

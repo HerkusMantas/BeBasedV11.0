@@ -1,5 +1,17 @@
 
 <template>
+    <div class="top-name-container">
+        <Button
+          icon="pi pi-cog"
+          class="button-cog"
+          @click="sidebarVisible = true"
+        />
+        <Button
+          icon="pi pi-user"
+          class="button-profile"
+          @click.stop="addFolderInline(slotProps.node)" 
+        />
+    </div>
     <div class="card">
         <div class="flex flex-wrap gap-2 mb-6">
             <Button type="button" icon="pi pi-plus" label="Expand All" @click="expandAll" />
@@ -67,6 +79,11 @@
             
         </Tree>
     </div>
+    <Sidebar v-model:visible="sidebarVisible" position="right">
+        <!-- Content inside the drawer -->
+        <h2>Sidebar Content</h2>
+        <p>This is your drawer from the right!</p>
+    </Sidebar>
 </template>
 
 
@@ -76,7 +93,7 @@ import { NodeService } from '@/service/NodeService';
 import { nextTick } from 'vue';
 
 import Rating from 'primevue/rating';
-
+import Sidebar from 'primevue/sidebar';
 
 
 const selectedKey = ref({});
