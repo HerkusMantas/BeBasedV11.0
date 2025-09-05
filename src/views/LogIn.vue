@@ -19,6 +19,8 @@
 
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
+import { db, storage, auth } from '@/firebase';
+import { collection, addDoc, getDocs, deleteDoc, doc } from 'firebase/firestore';
 
 const router = useRouter();
 const username = ref('');

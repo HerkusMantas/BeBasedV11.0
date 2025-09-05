@@ -13,6 +13,10 @@ import 'primeicons/primeicons.css';
 import Button from 'primevue/button';
 import Sidebar from 'primevue/sidebar';
 
+import Checkbox from 'primevue/checkbox';
+import CheckboxGroup from 'primevue/checkboxgroup';
+
+
 
 
 import Tree from 'primevue/tree';

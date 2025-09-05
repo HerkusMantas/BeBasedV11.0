@@ -49,6 +49,22 @@
   max-width: 30px;  /* kad neišsitemptų */
 }
 
+.p-button .pi.pi-trash { /*Profile Icon*/
+  color: rgb(190, 189, 189);
+  background-color: transparent;
+  font-size: 25px;
+  align-items: center;
+}
+
+.p-button.p-component.p-button-icon-only.button-trash {
+  background: transparent;   /* mygtuko fonas */
+  border: 2px solid #374151;
+  border-radius: 50%;
+  width: 30px;      /* norimas plotis */  
+  height: 30px;     /* norimas aukštis */
+  min-width: 30px;  /* kad neišsitemptų */
+  max-width: 30px;  /* kad neišsitemptų */
+}
 /*--------------------TREE NODE STYLES--------------------*/
 
 .p-tree-node-content.p-tree-node-selectable {
@@ -65,7 +81,7 @@
     flex-wrap: nowrap;
     align-items: center;
     white-space: nowrap;
-    gap: 0.5rem;
+    gap: 10px;
     width: fit-content;
     max-width: 100%;
     align-self: flex-start;
@@ -75,10 +91,19 @@
   justify-content: flex-start;
   align-items: flex-start;
 }
+
+/*----------Elements  buttons Styles------------------*/
+
+.norowrap .hover-show {
+  gap: 10px;
+  display: flex;
+  align-items: center;
+}
+
 .red-400 .pi.pi-trash {
     color: #ef4444 !important;
 }
-.green-400 .pi.pi-folder-plus, .green-400 .pi.pi-file-plus {
+.green-400 .pi.pi-folder-plus {
     color: #22c55e !important;
 }
 

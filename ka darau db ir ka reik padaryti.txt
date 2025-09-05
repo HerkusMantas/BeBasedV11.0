@@ -12,4 +12,4 @@ KA REIKIA PADARYTI
 
 > Log In page
 
-> Elementu ilgis pervisa ekrana
+> Neissisaugo vaikai ir canvas, reikia kad istrintus perkeltu i recycled canvas
