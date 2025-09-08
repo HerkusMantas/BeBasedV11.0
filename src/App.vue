@@ -65,6 +65,37 @@
   min-width: 30px;  /* kad neišsitemptų */
   max-width: 30px;  /* kad neišsitemptų */
 }
+
+/*--------------------Search Input--------------------*/
+
+.search-input {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+/*--------------------TREE Arrange--------------------*/
+
+.tree-toolbar {
+  display: flex;
+  gap: 10px;
+  margin-top: 1rem;
+  margin-bottom: 0;
+  align-items: center;
+}
+
+.tree-toolbar .p-button {
+  /* Stilius visiems mygtukams juostoje */
+  background: #18181B !important; /* tamsus fonas */
+  color: #FFFFFF !important; /* geltonas tekstas */
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 12px 12px 0 0;
+  font-weight: bold;
+  padding: 0px 5px !important; 
+  width: auto !important;
+  font-size: 0.875rem !important;
+}
+
 /*--------------------TREE NODE STYLES--------------------*/
 
 .p-tree-node-content.p-tree-node-selectable {
@@ -94,7 +125,9 @@
 
 /*----------Elements  buttons Styles------------------*/
 
-.norowrap .hover-show {
+
+
+.norowrap .element-buttons {
   gap: 10px;
   display: flex;
   align-items: center;
@@ -123,6 +156,9 @@
 .p-button .pi.pi-pencil {
   font-size: 0.7rem !important;
 }
+
+
+
 .p-tree-node-content.p-tree-node-selectable {
   width: fit-content !important;
   max-width: 100%;

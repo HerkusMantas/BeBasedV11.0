@@ -1,3 +1,13 @@
+KOMANDOS
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+>    git reset --hard origin/main               pakeisti visa koda lokaliai paemus is github
+>    npm run build >> firebase deploy
+
+
+
+
+
 KA DB DARAU
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -13,3 +23,9 @@ KA REIKIA PADARYTI
 > Log In page
 
 > Neissisaugo vaikai ir canvas, reikia kad istrintus perkeltu i recycled canvas
+
+> Neistrina is medzio elemento kai perkeliama i trash!!!!!!
+
+
+
+
