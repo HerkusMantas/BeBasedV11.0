@@ -53,11 +53,9 @@
                         <input
                             v-show="editingKey === slotProps.node.key"
                             v-model="slotProps.node.label"
-                            :ref="editingKey === slotProps.node.key ? setRenameInput : null"
-                            class="p-inputtext"
-                            style="width: 100%; min-width: 120px;"
-                            @blur="editingKey = null"
-                            @keyup.enter="editingKey = null"
+                            ref="renameInput"
+                            @blur="onRenameConfirm(slotProps.node)"
+                            @keyup.enter="onRenameConfirm(slotProps.node)"
                         />
                         <Checkbox
                             class="button-checkbox"
@@ -112,9 +110,8 @@
 
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, nextTick, watch } from 'vue';
 import { NodeService } from '@/service/NodeService';
-import { nextTick } from 'vue';
 
 import Rating from 'primevue/rating';
 import Sidebar from 'primevue/sidebar';
@@ -125,7 +122,6 @@ import { doc, deleteDoc } from 'firebase/firestore';
 
 // Funkcija prideda naują katalogą tiesiai į nurodytą tėvinį elementą (parent node)
 import { collection, addDoc, getDocs } from 'firebase/firestore';
-
 
 const selectedKey = ref({});
 const lastSelectedNode = ref(null); // Saugosime paskutinį pasirinktą elementą
@@ -138,14 +134,6 @@ const onTreeClick = (event) => {
 
 const editingKey = ref(null);
 const renameInput = ref(null);
-function setRenameInput(el) {
-  if (el) {
-    renameInput.value = el;
-    nextTick(() => {
-      el.select();
-    });
-  }
-}
 
 // const value = ref(null); // Saugojame įvertinimą
 
@@ -156,6 +144,22 @@ const hover = ref(null); // Saugojame šiuo metu užvesdami pelės rodyklę mazg
 
 const newFolderName = ref('');
 const newCanvasName = ref('');
+
+// Automatinis teksto pažymėjimas kai tik pasikeičia editingKey
+watch(editingKey, async (newKey) => {
+  if (newKey) {
+    let tries = 0;
+    const trySelect = () => {
+      if (renameInput.value) {
+        renameInput.value.select();
+      } else if (tries < 10) {
+        tries++;
+        setTimeout(trySelect, 30);
+      }
+    };
+    trySelect();
+  }
+});
 
 // --- Metodai ---
 
@@ -203,128 +207,98 @@ async function addCanvas(canvasData) {
 
 
 
-// 4. Pridėti folderį į pasirinktą node arba kaip root
-const addFolderToSelected = async () => {
+// 4. Pridėti folderį į pasirinktą node arba kaip root (tik UI, ne DB)
+const addFolderToSelected = () => {
     const selectedKeyValue = Object.keys(selectedKey.value)[0];
-    const folderLabel = newFolderName.value || 'New Folder';
-    if (!selectedKeyValue) {
-        // ROOT folder
-        const folderData = {
-            label: folderLabel,
-            icon: 'pi pi-fw pi-folder',
-            showButton: true,
-            parentKey: null,
-            rating: 0,
-            children: [],
-        };
-        const id = await addFolder(folderData);
-        if (id) {
-            nodes.value.push({ ...folderData, key: id });
-            editingKey.value = id;
-            nextTick(() => {
-                if (renameInput.value) {
-                    renameInput.value.select();
-                }
-            });
-        }
-        newFolderName.value = '';
-        return;
-    }
-    // Vaikinis folderis
-    const findNode = (nodesArr, key) => {
-        for (const node of nodesArr) {
-            if (node.key === key) return node;
-            if (node.children) {
-                const found = findNode(node.children, key);
-                if (found) return found;
-            }
-        }
-        return null;
+    const tempKey = 'temp-' + Date.now();
+    const folderData = {
+        label: '',
+        icon: 'pi pi-fw pi-folder',
+        showButton: true,
+        parentKey: selectedKeyValue || null,
+        rating: 0,
+        children: [],
+        key: tempKey,
+        isPending: true
     };
-    const selectedNode = findNode(nodes.value, selectedKeyValue);
-    if (selectedNode && Array.isArray(selectedNode.children)) {
-        const folderData = {
-            label: folderLabel,
-            icon: 'pi pi-fw pi-folder',
-            showButton: true,
-            parentKey: selectedNode.key,
-            rating: 0,
-            children: [],
-        };
-        const id = await addFolder(folderData);
-        if (id) {
-            selectedNode.children.push({ ...folderData, key: id });
-            editingKey.value = id;
-            nextTick(() => {
-                if (renameInput.value) {
-                    renameInput.value.select();
+    if (!selectedKeyValue) {
+        nodes.value.push(folderData);
+    } else {
+        expandedKeys.value[selectedKeyValue] = true;
+        const findNode = (nodesArr, key) => {
+            for (const node of nodesArr) {
+                if (node.key === key) return node;
+                if (node.children) {
+                    const found = findNode(node.children, key);
+                    if (found) return found;
                 }
-            });
+            }
+            return null;
+        };
+        const selectedNode = findNode(nodes.value, selectedKeyValue);
+        if (selectedNode && Array.isArray(selectedNode.children)) {
+            selectedNode.children.push(folderData);
         }
-        newFolderName.value = '';
     }
+    editingKey.value = tempKey;
 };
 
-
-// 5. Pridėti canvas į pasirinktą node arba kaip root
-const addCanvasToSelected = async () => {
+// 5. Pridėti canvas į pasirinktą node arba kaip root (tik UI, ne DB)
+const addCanvasToSelected = () => {
     const selectedKeyValue = Object.keys(selectedKey.value)[0];
-    const canvasLabel = newCanvasName.value || 'New Canvas';
-    if (!selectedKeyValue) {
-        // ROOT canvas
-        const canvasData = {
-            label: canvasLabel,
-            icon: 'pi pi-fw pi-file',
-            showButton: true,
-            parentKey: null,
-            rating: 0,
-        };
-        const id = await addCanvas(canvasData);
-        if (id) {
-            nodes.value.push({ ...canvasData, key: id });
-            editingKey.value = id;
-            nextTick(() => {
-                if (renameInput.value) {
-                    renameInput.value.select();
-                }
-            });
-        }
-        newCanvasName.value = '';
-        return;
-    }
-    // Vaikinis canvas
-    const findNode = (nodesArr, key) => {
-        for (const node of nodesArr) {
-            if (node.key === key) return node;
-            if (node.children) {
-                const found = findNode(node.children, key);
-                if (found) return found;
-            }
-        }
-        return null;
+    const tempKey = 'temp-' + Date.now();
+    const canvasData = {
+        label: '',
+        icon: 'pi pi-fw pi-file',
+        showButton: true,
+        parentKey: selectedKeyValue || null,
+        rating: 0,
+        key: tempKey,
+        isPending: true
     };
-    const selectedNode = findNode(nodes.value, selectedKeyValue);
-    if (selectedNode && Array.isArray(selectedNode.children)) {
-        const canvasData = {
-            label: canvasLabel,
-            icon: 'pi pi-fw pi-file',
-            showButton: true,
-            parentKey: selectedNode.key,
-            rating: 0,
-        };
-        const id = await addCanvas(canvasData);
-        if (id) {
-            selectedNode.children.push({ ...canvasData, key: id });
-            editingKey.value = id;
-            nextTick(() => {
-                if (renameInput.value) {
-                    renameInput.value.select();
+    if (!selectedKeyValue) {
+        nodes.value.push(canvasData);
+    } else {
+        expandedKeys.value[selectedKeyValue] = true;
+        const findNode = (nodesArr, key) => {
+            for (const node of nodesArr) {
+                if (node.key === key) return node;
+                if (node.children) {
+                    const found = findNode(node.children, key);
+                    if (found) return found;
                 }
-            });
+            }
+            return null;
+        };
+        const selectedNode = findNode(nodes.value, selectedKeyValue);
+        if (selectedNode && Array.isArray(selectedNode.children)) {
+            selectedNode.children.push(canvasData);
         }
-        newCanvasName.value = '';
     }
+    editingKey.value = tempKey;
 };
+
+// Patvirtinus pavadinimą (Enter/blur), įrašyti į Firestore
+const onRenameConfirm = async (node) => {
+    if (node.isPending && node.label.trim()) {
+        const data = { ...node };
+        delete data.key;
+        delete data.isPending;
+        let id;
+        if (node.icon === 'pi pi-fw pi-folder') {
+            id = await addFolder(data);
+        } else {
+            id = await addCanvas(data);
+        }
+        if (id) {
+            node.key = id;
+            node.isPending = false;
+        }
+    }
+    editingKey.value = null;
+};
+
+// Šablone input: žiūrėkite template dalį
 
 // 6. Inline folder/canvas kūrimas (naudokite tik jei norite iškart įrašyti į Firestore)
 const addFolderInline = async (parentNode) => {
