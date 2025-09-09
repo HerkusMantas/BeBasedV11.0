@@ -40,105 +40,104 @@
         </div>
 
             <!-- File Tree ---------------------------->
-
-    <Tree 
-      v-model:selectionKeys="selectedKey"
-      v-model:expandedKeys="expandedKeys"
-      :value="filteredNodes"
-      selectionMode="multiple"
-      :metaKeySelection="true"
-      @nodeSelect="onNodeSelect"
-      @nodeUnselect="onNodeUnselect"
-      @nodeExpand="onNodeExpand"
-      @nodeCollapse="onNodeCollapse"
-      @click="onTreeClick"
-      class="w-full md:w-[30rem]">
-
-
-            <template #default="slotProps">
-
-                <div class="p-tree-node-content p-tree-node-selectable"
-                    @mouseover="hover = slotProps.node.key"
-                    @mouseleave="hover = null">
+        <Tree 
+          v-model:selectionKeys="selectedKey"
+          v-model:expandedKeys="expandedKeys"
+          :value="filteredNodes"
+          selectionMode="multiple"
+          :metaKeySelection="true"
+          @nodeSelect="onNodeSelect"
+          @nodeUnselect="onNodeUnselect"
+          @nodeExpand="onNodeExpand"
+          @nodeCollapse="onNodeCollapse"
+          @click="onTreeClick"
+          class="w-full md:w-[30rem]">
 
 
-                    <div class="flex align-items-center gap-2 norowrap">
+              <template #default="slotProps">
+
+                  <div class="p-tree-node-content p-tree-node-selectable"
+                      @mouseover="hover = slotProps.node.key"
+                      @mouseleave="hover = null">
+
+
+                      <div class="flex align-items-center gap-2 norowrap">
 
 
 
-                        <span v-if="editingKey !== slotProps.node.key">{{ slotProps.node.label }}</span>
+                          <span v-if="editingKey !== slotProps.node.key">{{ slotProps.node.label }}</span>
 
 
-                        
-                        
-                        <div
-                            class="element-buttons-row"    
-                        >
+                          
+                          
+                          <div
+                              class="element-buttons-row"    
+                          >
 
-                            <!--New Element Rename ----------------------------->
+                              <!--New Element Rename ----------------------------->
 
-                            <input
-                                v-if="editingKey === slotProps.node.key"
-                                v-model="slotProps.node.label"
-                                ref="renameInput"
-                                @blur="onRenameConfirm(slotProps.node)"
-                                @keyup.enter="onRenameConfirm(slotProps.node)"
-                            />
+                              <input
+                                  v-if="editingKey === slotProps.node.key"
+                                  v-model="slotProps.node.label"
+                                  ref="renameInput"
+                                  @blur="onRenameConfirm(slotProps.node)"
+                                  @keyup.enter="onRenameConfirm(slotProps.node)"
+                              />
 
-                            <!--Rating ----------------------------------------->
+                              <!--Rating ----------------------------------------->
 
-                        </div>
-                            <Rating v-model="slotProps.node.rating" @change="updateRating(slotProps.node)" />
+                          </div>
+                              <Rating v-model="slotProps.node.rating" @change="updateRating(slotProps.node)" />
 
-                            <!--Element Buttons ----------------------------->
+                              <!--Element Buttons ----------------------------->
 
-                        <div 
-                            class="element-buttons"
-                             v-show="hover === slotProps.node.key || editingKey === slotProps.node.key">
-                            
-                            <Checkbox
-                                class="button-checkbox"
-                                v-model="slotProps.node.checked"
-                                binary
-                                size="small"
-                            />
-                            <Button
-                                v-if="slotProps.node.showButton && slotProps.node.icon === 'pi pi-fw pi-folder'"
-                                icon="pi pi-folder-plus"
-                                class="p-button-text green-400"
-                                style="color: var(--green-400)"
-                                @click.stop="addFolderInline(slotProps.node)"
-                            />
-                            <Button
-                                v-if="slotProps.node.showButton && slotProps.node.icon === 'pi pi-fw pi-folder'"
-                                icon="pi pi-file-plus"
-                                class="p-button-text green-400"
-                                style="color: var(--green-400)"
-                                @click.stop="addCanvasInline(slotProps.node)"
-                            />
-                            <Button
-                                v-if="slotProps.node.showButton"
-                                icon="pi pi-pencil"
-                                class="p-button-text yellow-400"
-                                style="color: var(--yellow-400)"
-                                @click.stop="editNode(slotProps.node)"
-                            />
-                            <Button
-                                v-if="slotProps.node.showButton"
-                                icon="pi pi-trash"
-                                class="p-button-text red-400"
-                                style="color: var(--red-400); font-size: 0.875rem"
-                                @click.stop="removeNode(slotProps.node)"
-                            />
-                        </div>
-                    
-                    </div>
-                </div>
-                
-                
-            </template>
-            
-        </Tree>
+                          <div 
+                              class="element-buttons"
+                              v-show="hover === slotProps.node.key || editingKey === slotProps.node.key">
+                              
+                              <Checkbox
+                                  class="button-checkbox"
+                                  v-model="slotProps.node.checked"
+                                  binary
+                                  size="small"
+                              />
+                              <Button
+                                  v-if="slotProps.node.showButton && slotProps.node.icon === 'pi pi-fw pi-folder'"
+                                  icon="pi pi-folder-plus"
+                                  class="p-button-text green-400"
+                                  style="color: var(--green-400)"
+                                  @click.stop="addFolderInline(slotProps.node)"
+                              />
+                              <Button
+                                  v-if="slotProps.node.showButton && slotProps.node.icon === 'pi pi-fw pi-folder'"
+                                  icon="pi pi-file-plus"
+                                  class="p-button-text green-400"
+                                  style="color: var(--green-400)"
+                                  @click.stop="addCanvasInline(slotProps.node)"
+                              />
+                              <Button
+                                  v-if="slotProps.node.showButton"
+                                  icon="pi pi-pencil"
+                                  class="p-button-text yellow-400"
+                                  style="color: var(--yellow-400)"
+                                  @click.stop="editNode(slotProps.node)"
+                              />
+                              <Button
+                                  v-if="slotProps.node.showButton"
+                                  icon="pi pi-trash"
+                                  class="p-button-text red-400"
+                                  style="color: var(--red-400); font-size: 0.875rem"
+                                  @click.stop="removeNode(slotProps.node)"
+                              />
+                          </div>
+                      
+                      </div>
+                  </div>
+                  
+                  
+              </template>
+              
+          </Tree>
     </div>
 
     <!-- Sidebars -->
@@ -147,7 +146,7 @@
         <SidebarCog />
     </Sidebar>
     <Sidebar v-model:visible="sidebarTrashVisible" position="right" style="width: 80vw;">
-        <SidebarTrash />
+        <SidebarTrash @itemRestored="reloadTree" />
     </Sidebar>
 
 </template>
@@ -172,6 +171,10 @@ import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
 
 // Funkcija prideda naują katalogą tiesiai į nurodytą tėvinį elementą (parent node)
 import { collection, addDoc, getDocs } from 'firebase/firestore';
+
+//  Context menu komponentas
+import ContextMenuFileTree from './ContextMenuFileTree.vue'
+const contextMenuRef = ref(null)
 
 const filtertree = ref(''); // Saugojame filtro reikšmę SERACHAS
 const selectedKey = ref({});
@@ -273,6 +276,10 @@ async function updateRating(node) {
 }
 
 // --- Metodai ---
+
+function onRightClick(event) {
+  contextMenuRef.value.show(event)
+}
 
 async function moveToTrash(node) {
   // Įrašyti į trash kolekciją
@@ -403,39 +410,48 @@ async function addCanvas(canvasData) {
 
 
 // 4. Pridėti folderį į pasirinktą node arba kaip root (tik UI, ne DB)
-const addFolderToSelected = () => {
-    const selectedKeyValue = Object.keys(selectedKey.value)[0];
-    const tempKey = 'temp-' + Date.now();
-    const folderData = {
-        label: 'New Folder',
-        icon: 'pi pi-fw pi-folder',
-        showButton: true,
-        parentKey: selectedKeyValue || null,
-        rating: 0,
-        children: [],
-        key: tempKey,
-        isPending: true
-    };
-    if (!selectedKeyValue) {
-        nodes.value.push(folderData);
-    } else {
-        expandedKeys.value[selectedKeyValue] = true;
-        const findNode = (nodesArr, key) => {
-            for (const node of nodesArr) {
-                if (node.key === key) return node;
-                if (node.children) {
-                    const found = findNode(node.children, key);
-                    if (found) return found;
-                }
-            }
-            return null;
-        };
-        const selectedNode = findNode(nodes.value, selectedKeyValue);
-        if (selectedNode && Array.isArray(selectedNode.children)) {
-            selectedNode.children.push(folderData);
+const addFolderToSelected = async () => {
+  const selectedKeyValue = Object.keys(selectedKey.value)[0];
+  const folderData = {
+    label: 'New Folder',
+    icon: 'pi pi-fw pi-folder',
+    showButton: true,
+    parentKey: selectedKeyValue || null,
+    rating: 0,
+    children: [],
+  };
+  // Iškart įrašom į Firebase
+  const docRef = await addDoc(collection(db, "folders"), folderData);
+  folderData.key = docRef.id;
+
+  // Pridedam į UI
+  if (!selectedKeyValue) {
+    nodes.value.push(folderData);
+  } else {
+    expandedKeys.value[selectedKeyValue] = true;
+    const findNode = (nodesArr, key) => {
+      for (const node of nodesArr) {
+        if (node.key === key) return node;
+        if (node.children) {
+          const found = findNode(node.children, key);
+          if (found) return found;
         }
+      }
+      return null;
+    };
+    const selectedNode = findNode(nodes.value, selectedKeyValue);
+    if (selectedNode && Array.isArray(selectedNode.children)) {
+      selectedNode.children.push(folderData);
     }
-    editingKey.value = tempKey;
+  }
+
+  // Įjungiam pervadinimo režimą
+  editingKey.value = folderData.key;
+  await nextTick();
+  if (renameInput.value) {
+    renameInput.value.focus();
+    renameInput.value.select();
+  }
 };
 
 // 5. Pridėti canvas į pasirinktą node arba kaip root (tik UI, ne DB)
@@ -569,36 +585,53 @@ const removeNode = async (node) => {
   const children = node.children || [];
 
   // Debug log: ką trini
-  console.log('Trinu iš kolekcijos:', node.icon === 'pi pi-fw pi-folder' ? 'folders' : 'canvases', 'ID:', node.key);
+  console.log('DEBUG: Trinu iš kolekcijos:', node.icon === 'pi pi-fw pi-folder' ? 'folders' : 'canvases', 'ID:', node.key);
+  const collectionName = node.icon === 'pi pi-fw pi-folder' ? 'folders' : 'canvases';
+  console.log('DEBUG: Kolekcijos pavadinimas:', collectionName);
+  console.log('DEBUG: Key tipas:', typeof node.key, 'Key:', node.key);
+
+  // Patikrinam ar dokumentas egzistuoja prieš trynimą
+  try {
+    const docRef = doc(db, collectionName, node.key);
+    const docSnap = await getDocs(collection(db, collectionName));
+    const exists = Array.from(docSnap.docs).some(d => d.id === node.key);
+    console.log('DEBUG: Dokumentas egzistuoja:', exists);
+  } catch (e) {
+    console.error('DEBUG: Klaida tikrinant dokumento egzistavimą:', e);
+  }
 
   // Įrašyti į deletedItems kolekciją su pilna info
-  await addDoc(collection(db, "deletedItems"), {
-    ...node,
-    pathToRoot,
-    siblings,
-    children
-  });
+  try {
+    await addDoc(collection(db, "deletedItems"), {
+      ...node,
+      pathToRoot,
+      siblings,
+      children
+    });
+    console.log('DEBUG: Įrašyta į deletedItems kolekciją');
+  } catch (e) {
+    console.error('DEBUG: Klaida įrašant į deletedItems:', e);
+  }
 
   // Ištrinti iš pagrindinės kolekcijos tik jei key nėra laikinas
-  const collectionName = node.icon === 'pi pi-fw pi-folder' ? 'folders' : 'canvases';
   if (!String(node.key).startsWith('temp-')) {
-    await deleteDoc(doc(db, collectionName, node.key));
+    try {
+      console.log('DEBUG: Bandau trinti dokumentą:', node.key, 'iš kolekcijos:', collectionName);
+      await deleteDoc(doc(db, collectionName, node.key));
+      console.log('DEBUG: Bandymas baigtas, deleteDoc įvykdytas');
+    } catch (e) {
+      console.error('DEBUG: Klaida trynimo metu:', e);
+    }
+  } else {
+    console.log('DEBUG: Key laikinas, trynimas praleistas');
   }
 
   // Pašalinti iš lokalaus medžio
   recursiveRemove(nodes.value, node.key);
+  console.log('DEBUG: Pašalinta iš lokalaus medžio');
 
-  // Reload medį iš Firestore
-  await reloadTree();
 };
 
-  // Ištrinti iš pagrindinės kolekcijos
-  const collectionName = node.icon === 'pi pi-fw pi-folder' ? 'folders' : 'canvases';
-  await deleteDoc(doc(db, collectionName, node.key));
-
-  // Pašalinti iš lokalaus medžio
-  recursiveRemove(nodes.value, node.key);
-};
 
 // Paspaudus mygtuką, sustabdome evento plitimą, kad nebūtų išskleistas/suskleistas katalogas
 const onAddButtonClick = (event, node) => {

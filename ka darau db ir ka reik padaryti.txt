@@ -29,3 +29,4 @@ KA REIKIA PADARYTI
 
 
 
+perziurek koda mano ir pritaikyk sita Saugiausias ir lankstiausias – per Cloud Functions. man reikia kad istrynus is medzio firebase istrintu ji is medzio kolekcijos ir perkeltu ji i deleteditems(sidebartrash) su visais jo parametrais(vaikais, tevu id (kelia kur jis buvo), ratinga, label, firebaseid,icon ir t.t). sidebar trashe paspaudus restore ji grazintu i ta vieta medyje kur jis buvo t.y. i ta teva is kur buvo pasalintas ir su visais vaikais bei ju parametrais. paspaudus trinti sidebar trashe turi istrinti ta  dokumenta firebase database deleteditem kolekcijoje 
