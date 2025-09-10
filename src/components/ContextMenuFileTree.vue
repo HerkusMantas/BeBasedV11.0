@@ -3,13 +3,15 @@
 </template>
 
 <script setup>
-import { ref, defineExpose } from 'vue'
+
+import { ref, defineExpose, defineEmits } from 'vue'
 import ContextMenu from 'primevue/contextmenu'
 
+const emit = defineEmits(['openIconPicker'])
 const menu = ref(null)
 const items = [
   { label: 'Veiksmas 1', icon: 'pi pi-fw pi-pencil', command: () => {/* ... */} },
-  { label: 'Veiksmas 2', icon: 'pi pi-fw pi-trash', command: () => {/* ... */} }
+  { label: 'Veiksmas 2', icon: 'pi pi-fw pi-trash', command: () => { emit('openIconPicker') } }
 ]
 
 // Kad tėvinis komponentas galėtų iškviesti show(event)

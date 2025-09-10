@@ -3,7 +3,7 @@ KOMANDOS
 
 >    git reset --hard origin/main               pakeisti visa koda lokaliai paemus is github
 >    npm run build >> firebase deploy
-
+>    git add .; git commit -m "Atnaujinta: iconpicker failas"; git push   
 
 
 

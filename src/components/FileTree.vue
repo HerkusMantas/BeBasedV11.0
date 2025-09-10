@@ -19,7 +19,11 @@
 
     <div class="card">
 
-        <InputText v-model="filtertree" placeholder="Search..." class="search-input" />
+        <InputText 
+          v-model="filtertree"
+          placeholder="Search..."
+          class="search-input" 
+        />
         
                   <!-- Expand/Collapse/Add ---------------------------->
         <div class="flex flex-wrap gap-2 mb-6">
@@ -58,7 +62,9 @@
 
                   <div class="p-tree-node-content p-tree-node-selectable"
                       @mouseover="hover = slotProps.node.key"
-                      @mouseleave="hover = null">
+                      @mouseleave="hover = null"
+                      @contextmenu.prevent="onRightClick"
+                    >
 
 
                       <div class="flex align-items-center gap-2 norowrap">
@@ -149,6 +155,18 @@
         <SidebarTrash @itemRestored="reloadTree" />
     </Sidebar>
 
+    <IconPickerModal
+      :visible="showIconModal"
+      :icons="['pi pi-home', 'pi pi-folder', 'pi pi-file']"
+      @update:visible="showIconModal = $event"
+      @select="icon => selectedIcon = icon"
+    />
+
+    <ContextMenuFileTree
+      ref="contextMenuRef"
+      @openIconPicker="showIconModal = true"
+    />
+
 </template>
 
 
@@ -176,6 +194,9 @@ import { collection, addDoc, getDocs } from 'firebase/firestore';
 import ContextMenuFileTree from './ContextMenuFileTree.vue'
 const contextMenuRef = ref(null)
 
+const showIconModal = ref(false)
+const selectedIcon = ref('')
+
 const filtertree = ref(''); // Saugojame filtro reikšmę SERACHAS
 const selectedKey = ref({});
 const lastSelectedNode = ref(null); // Saugosime paskutinį pasirinktą elementą
@@ -185,6 +206,8 @@ const onTreeClick = (event) => {
     if (event.target.closest('.p-tree-node-content')) return;
     selectedKey.value = {};
 };
+
+
 
 const editingKey = ref(null);
 const renameInput = ref(null);
@@ -278,7 +301,11 @@ async function updateRating(node) {
 // --- Metodai ---
 
 function onRightClick(event) {
-  contextMenuRef.value.show(event)
+  if (contextMenuRef.value && contextMenuRef.value.show) {
+    contextMenuRef.value.show(event)
+  } else {
+    console.warn('ContextMenu ref is not ready');
+  }
 }
 
 async function moveToTrash(node) {
