@@ -70,7 +70,7 @@
                       <div class="flex align-items-center gap-2 norowrap">
 
 
-
+                          <Icon :icon="slotProps.node.icon" :style="{ color: slotProps.node.iconColor || '#fff', fontSize: '1.2em' }" />
                           <span v-if="editingKey !== slotProps.node.key">{{ slotProps.node.label }}</span>
 
 
@@ -177,7 +177,7 @@ import { NodeService } from '@/service/NodeService';
 import SidebarCog from './SidebarCog.vue';
 import SidebarTrash from './SidebarTrash.vue';
 
-
+import { Icon } from '@iconify/vue'
 
 
 import Rating from 'primevue/rating';
@@ -300,6 +300,7 @@ async function updateRating(node) {
 
 // --- Metodai ---
 
+
 function onRightClick(event) {
   if (contextMenuRef.value && contextMenuRef.value.show) {
     contextMenuRef.value.show(event)
@@ -411,6 +412,26 @@ async function reloadTree() {
   console.log('Medis atnaujintas, nodes:', nodes.value);
 }
 
+async function updateNodeIconAndColor(node) {
+  let collectionName = node.icon === 'mdi:folder' ? 'folders' : 'canvases';
+  try {
+    await updateDoc(doc(db, collectionName, node.key), {
+      icon: node.icon,
+      iconColor: node.iconColor
+    });
+  } catch (e) {
+    console.error('Klaida atnaujinant ikoną ar spalvą:', e);
+  }
+}
+
+function onIconSelected({ icon, color }) {
+  if (selectedNode.value) {
+    selectedNode.value.icon = icon
+    selectedNode.value.iconColor = color
+    updateNodeIconAndColor(selectedNode.value)
+  }
+}
+
 // Funkcija įrašo folderį į Firestore
 async function addFolder(folderData) {
     try {
@@ -441,7 +462,8 @@ const addFolderToSelected = async () => {
   const selectedKeyValue = Object.keys(selectedKey.value)[0];
   const folderData = {
     label: 'New Folder',
-    icon: 'pi pi-fw pi-folder',
+    icon: 'mdi:folder',
+    iconColor: '#1976d2',
     showButton: true,
     parentKey: selectedKeyValue || null,
     rating: 0,
@@ -487,7 +509,8 @@ const addCanvasToSelected = () => {
     const tempKey = 'temp-' + Date.now();
     const canvasData = {
         label: 'New Canvas',
-        icon: 'pi pi-fw pi-file',
+        icon: 'mdi:file',
+        iconColor: '#1976d2',
         showButton: true,
         parentKey: selectedKeyValue || null,
         rating: 0,
@@ -552,7 +575,8 @@ const addFolderInline = async (parentNode) => {
     const folderData = {
         parentKey: parentNode.key,
         label: 'New Folder',
-        icon: 'pi pi-fw pi-folder',
+        icon: 'mdi:folder',
+        iconColor: '#1976d2',
         showButton: true,
         rating: 0,
         children: [],
@@ -574,6 +598,7 @@ const addCanvasInline = async (parentNode) => {
         parentKey: parentNode.key,
         label: 'New Canvas',
         icon: 'pi pi-fw pi-file',
+        iconColor: '#1976d2',
         showButton: true,
         rating: 0,
     };

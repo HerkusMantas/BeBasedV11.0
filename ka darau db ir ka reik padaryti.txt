@@ -30,3 +30,43 @@ KA REIKIA PADARYTI
 
 
 perziurek koda mano ir pritaikyk sita Saugiausias ir lankstiausias – per Cloud Functions. man reikia kad istrynus is medzio firebase istrintu ji is medzio kolekcijos ir perkeltu ji i deleteditems(sidebartrash) su visais jo parametrais(vaikais, tevu id (kelia kur jis buvo), ratinga, label, firebaseid,icon ir t.t). sidebar trashe paspaudus restore ji grazintu i ta vieta medyje kur jis buvo t.y. i ta teva is kur buvo pasalintas ir su visais vaikais bei ju parametrais. paspaudus trinti sidebar trashe turi istrinti ta  dokumenta firebase database deleteditem kolekcijoje 
+
+<template>
+  <Dialog 
+        :visible="visible"
+        header="Pasirinkite ikoną"
+        :modal="true"
+        :closable="true"
+        @update:visible="emit('update:visible', $event)"
+    >
+    <div class="icon-grid">
+      <TabView>
+        <TabPanel header="Pirmas Tabas">
+          <p>Čia yra pirmo tabo turinys.</p>
+        </TabPanel>
+        <TabPanel header="Antras Tabas">
+          <div class="color-palette">
+      <span
+        v-for="color in colorList"
+        :key="color"
+        :style="{ background: color }"
+        class="color-option"
+        @click="selectedColor = color"
+        :class="{ selected: selectedColor === color }"
+      ></span>
+    </div>
+    <div class="icon-grid">
+      <Icon
+        v-for="name in iconList"
+        :key="name"
+        :icon="name"
+        :style="{ color: selectedColor }"
+        class="icon-option"
+        @click="selectIcon(name)"
+      />
+    </div>
+        </TabPanel>
+      </TabView>
+    </div>
+  </Dialog>
+</template>
