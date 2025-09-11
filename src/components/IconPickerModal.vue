@@ -7,9 +7,17 @@
         @update:visible="emit('update:visible', $event)"
     >
     <div class="icon-grid">
-      <span v-for="icon in icons" :key="icon" class="icon-option" @click="selectIcon(icon)">
-        <i :class="icon"></i>
-      </span>
+      <TabView>
+        <TabPanel header="Pirmas Tabas">
+          <p>Čia yra pirmo tabo turinys.</p>
+        </TabPanel>
+        <TabPanel header="Antras Tabas">
+          <p>Čia yra antro tabo turinys.</p>
+          <div class="icon-list">
+            <Icon v-for="name in iconList" :key="name" :icon="name" />
+          </div>
+        </TabPanel>
+      </TabView>
     </div>
   </Dialog>
 </template>
@@ -17,6 +25,16 @@
 <script setup>
 import { ref } from 'vue'
 import Dialog from 'primevue/dialog'
+import TabView from 'primevue/tabview';
+import TabPanel from 'primevue/tabpanel';
+import { Icon } from '@iconify/vue';
+
+const iconList = [
+  'mdi:home',
+  'uil:github',
+  'mdi:folder',
+  // ...kitos ikonos
+];
 
 const props = defineProps({
   visible: Boolean,
@@ -24,10 +42,7 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:visible', 'select'])
 
-function selectIcon(icon) {
-  emit('select', icon)
-  emit('update:visible', false)
-}
+
 </script>
 
 <style>
