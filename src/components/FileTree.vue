@@ -63,7 +63,7 @@
                   <div class="p-tree-node-content p-tree-node-selectable"
                       @mouseover="hover = slotProps.node.key"
                       @mouseleave="hover = null"
-                      @contextmenu.prevent="onRightClick"
+                      @contextmenu.prevent="onRightClick($event, slotProps.node)"
                     >
 
 
@@ -108,14 +108,14 @@
                                   size="small"
                               />
                               <Button
-                                  v-if="slotProps.node.showButton && slotProps.node.icon === 'pi pi-fw pi-folder'"
+                                  v-if="slotProps.node.showButton && slotProps.node.type === 'folder'"
                                   icon="pi pi-folder-plus"
                                   class="p-button-text green-400"
                                   style="color: var(--green-400)"
                                   @click.stop="addFolderInline(slotProps.node)"
                               />
                               <Button
-                                  v-if="slotProps.node.showButton && slotProps.node.icon === 'pi pi-fw pi-folder'"
+                                  v-if="slotProps.node.showButton && slotProps.node.type === 'folder'"
                                   icon="pi pi-file-plus"
                                   class="p-button-text green-400"
                                   style="color: var(--green-400)"
@@ -157,14 +157,13 @@
 
     <IconPickerModal
       :visible="showIconModal"
-      :icons="['pi pi-home', 'pi pi-folder', 'pi pi-file']"
       @update:visible="showIconModal = $event"
-      @select="icon => selectedIcon = icon"
+      @select="onIconSelected"
     />
 
     <ContextMenuFileTree
       ref="contextMenuRef"
-      @openIconPicker="showIconModal = true"
+      @openIconPicker="openIconPicker"
     />
 
 </template>
@@ -193,6 +192,8 @@ import { collection, addDoc, getDocs } from 'firebase/firestore';
 //  Context menu komponentas
 import ContextMenuFileTree from './ContextMenuFileTree.vue'
 const contextMenuRef = ref(null)
+
+const selectedNode = ref(null)
 
 const showIconModal = ref(false)
 const selectedIcon = ref('')
@@ -290,7 +291,7 @@ watch(filtertree, (val) => {
 
 
 async function updateRating(node) {
-  let collectionName = node.icon === 'pi pi-fw pi-folder' ? 'folders' : 'canvases';
+  let collectionName = node.icon === 'mdi:folder' ? 'folders' : 'canvases';
   try {
     await updateDoc(doc(db, collectionName, node.key), { rating: node.rating });
   } catch (e) {
@@ -300,10 +301,14 @@ async function updateRating(node) {
 
 // --- Metodai ---
 
+function openIconPicker(node) {
+  selectedNode.value = node
+  showIconModal.value = true
+}
 
-function onRightClick(event) {
-  if (contextMenuRef.value && contextMenuRef.value.show) {
-    contextMenuRef.value.show(event)
+function onRightClick(event, node) {
+  if (contextMenuRef.value && contextMenuRef.value.show && node) {
+    contextMenuRef.value.show(event, node)
   } else {
     console.warn('ContextMenu ref is not ready');
   }
@@ -313,7 +318,7 @@ async function moveToTrash(node) {
   // Įrašyti į trash kolekciją
   await addDoc(collection(db, "deletedItems"), node);
   // Ištrinti iš pagrindinės kolekcijos
-  const collectionName = node.icon === 'pi pi-fw pi-folder' ? 'folders' : 'canvases';
+  const collectionName = node.type === 'folder' ? 'folders' : 'canvases';
   await deleteDoc(doc(db, collectionName, node.key));
   // Pašalinti iš lokalaus medžio
   recursiveRemove(nodes.value, node.key);
@@ -413,7 +418,7 @@ async function reloadTree() {
 }
 
 async function updateNodeIconAndColor(node) {
-  let collectionName = node.icon === 'mdi:folder' ? 'folders' : 'canvases';
+  let collectionName = node.type === 'folder' ? 'folders' : 'canvases';
   try {
     await updateDoc(doc(db, collectionName, node.key), {
       icon: node.icon,
@@ -461,9 +466,10 @@ async function addCanvas(canvasData) {
 const addFolderToSelected = async () => {
   const selectedKeyValue = Object.keys(selectedKey.value)[0];
   const folderData = {
+    type: 'folder',
     label: 'New Folder',
     icon: 'mdi:folder',
-    iconColor: '#1976d2',
+    iconColor: '#b4b6b8ff',
     showButton: true,
     parentKey: selectedKeyValue || null,
     rating: 0,
@@ -508,9 +514,10 @@ const addCanvasToSelected = () => {
     const selectedKeyValue = Object.keys(selectedKey.value)[0];
     const tempKey = 'temp-' + Date.now();
     const canvasData = {
+        type: 'file',
         label: 'New Canvas',
         icon: 'mdi:file',
-        iconColor: '#1976d2',
+        iconColor: '#b4b6b8ff',
         showButton: true,
         parentKey: selectedKeyValue || null,
         rating: 0,
@@ -548,7 +555,7 @@ const onRenameConfirm = async (node) => {
         delete data.key;
         delete data.isPending;
         let id;
-        if (node.icon === 'pi pi-fw pi-folder') {
+        if (node.type === 'folder') {
             id = await addFolder(data);
         } else {
             id = await addCanvas(data);
@@ -559,7 +566,7 @@ const onRenameConfirm = async (node) => {
         }
     } else if (!node.isPending && node.label.trim()) {
         // Jei node jau egzistuoja, atnaujinti label Firestore
-        let collectionName = node.icon === 'pi pi-fw pi-folder' ? 'folders' : 'canvases';
+        let collectionName = node.type === 'folder' ? 'folders' : 'canvases';
         try {
             await updateDoc(doc(db, collectionName, node.key), { label: node.label });
         } catch (e) {
@@ -574,6 +581,7 @@ const onRenameConfirm = async (node) => {
 const addFolderInline = async (parentNode) => {
     const folderData = {
         parentKey: parentNode.key,
+        type: 'folder',
         label: 'New Folder',
         icon: 'mdi:folder',
         iconColor: '#1976d2',
@@ -596,8 +604,9 @@ const addFolderInline = async (parentNode) => {
 const addCanvasInline = async (parentNode) => {
     const canvasData = {
         parentKey: parentNode.key,
+        type: 'file',
         label: 'New Canvas',
-        icon: 'pi pi-fw pi-file',
+        icon: 'mdi:file',
         iconColor: '#1976d2',
         showButton: true,
         rating: 0,
@@ -637,8 +646,8 @@ const removeNode = async (node) => {
   const children = node.children || [];
 
   // Debug log: ką trini
-  console.log('DEBUG: Trinu iš kolekcijos:', node.icon === 'pi pi-fw pi-folder' ? 'folders' : 'canvases', 'ID:', node.key);
-  const collectionName = node.icon === 'pi pi-fw pi-folder' ? 'folders' : 'canvases';
+  console.log('DEBUG: Trinu iš kolekcijos:', node.type === 'folder' ? 'folders' : 'canvases', 'ID:', node.key);
+  const collectionName = node.type === 'folder' ? 'folders' : 'canvases';
   console.log('DEBUG: Kolekcijos pavadinimas:', collectionName);
   console.log('DEBUG: Key tipas:', typeof node.key, 'Key:', node.key);
 

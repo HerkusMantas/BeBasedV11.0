@@ -28,13 +28,15 @@ onMounted(async () => {
 async function restoreItem(item) {
   try {
     // Nustatome, į kurią kolekciją ('folders' ar 'canvases') reikia atkurti
-    const collectionName = item.icon === 'pi pi-fw pi-folder' ? 'folders' : 'canvases';
+    const collectionName = item.type === 'folder' ? 'folders' : 'canvases';
 
     // Sukuriame "švarų" objektą be šiukšlinei skirtų metaduomenų
     const dataToRestore = {
+      type: item.type,
       key: item.key,
       label: item.label,
       icon: item.icon,
+      iconColor: item.iconColor,
       parentKey: item.parentKey,
       rating: item.rating,
       showButton: item.showButton
@@ -81,9 +83,9 @@ async function deleteForever(item) {
 
 <template>
   <div>
-    <h2>Šiukšlinė</h2>
+    <h2>Recycle Bin</h2>
     <div v-if="trashItems.length === 0" class="empty-trash-message">
-      Šiukšlinė tuščia.
+      The recycle bin is empty.
     </div>
     <div v-else>
       <div v-for="item in trashItems" :key="item.firebaseId" class="trash-item">
@@ -92,8 +94,8 @@ async function deleteForever(item) {
           <span class="item-label">{{ item.label }}</span>
         </div>
         <div class="item-actions">
-          <button @click="restoreItem(item)" class="button-restore">Atkurti</button>
-          <button @click="deleteForever(item)" class="button-delete">Ištrinti visam</button>
+          <button @click="restoreItem(item)" class="button-restore">Restore</button>
+          <button @click="deleteForever(item)" class="button-delete">Delete forever</button>
         </div>
       </div>
     </div>
