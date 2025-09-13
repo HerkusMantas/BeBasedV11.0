@@ -1,58 +1,61 @@
+
 # Copilot Instructions for vue-bebasedv11-0
 
-## Project Overview
-- This is a Vue 3 project using Vite as the build tool.
-- The codebase is organized by feature: components, views, services, stores, and routing.
+## Project Architecture
+- Vue 3 + Vite, using `<script setup>` and Composition API throughout.
 - Main entry: `src/main.js` mounts `App.vue`.
-- Routing is handled via `src/router/index.js`.
-- State management uses Pinia (see `src/stores/counter.js`).
-- Firebase integration is present in `src/firebase.js` and referenced in auth-related views.
+- Routing: `src/router/index.js` (dynamic routes, e.g. `/canvas/:id`).
+- State: Pinia stores in `src/stores/`.
+- Firebase: `src/firebase.js` (Firestore, Auth, Storage) is the main backend.
 
 ## Key Directories & Files
-- `src/components/`: Reusable UI components (e.g., `FileTree.vue`, `SidebarCog.vue`).
-- `src/views/`: Page-level components (e.g., `Home.vue`, `LogIn.vue`, `SignUp.vue`).
-- `src/service/NodeService.js`: Service for backend/data operations.
-- `src/stores/`: Pinia store modules.
-- `src/router/index.js`: Vue Router setup.
-- `public/`: Static assets (e.g., `favicon.ico`).
+- `src/components/`: UI and logic components (e.g., `FileTree.vue`, `ContextMenuFileTree.vue`, `IconPickerModal.vue`).
+- `src/views/`: Page-level views (e.g., `Home.vue`, `Canvas.vue`, `LogIn.vue`).
+- `src/service/NodeService.js`: Encapsulates backend/data logic.
+- `src/router/index.js`: Vue Router config; add new routes here.
+- `public/`: Static assets.
+
+## Data Flow & Patterns
+- **FileTree.vue**: Central for CRUD, tree structure, and UI logic. Nodes have `key` (Firebase ID), `type` (`folder`/`file`), `icon`, `iconColor`, and `children`.
+- **CRUD**: Use Firestore methods (`addDoc`, `getDocs`, `updateDoc`, `deleteDoc`) with correct collection (`folders`, `canvases`). Always use `key` as the document ID.
+- **Trash/Restore**: Deleted nodes are moved to `deletedItems` collection, with full metadata for restore. Use `moveToTrash` and `reloadTree` patterns.
+- **Context Menu**: Node actions (rename, icon/color change, delete) are handled via context menu components and events. Pass node via event or ref (`lastNode.value`).
+- **Icon/Color Selection**: Use `IconPickerModal.vue` for icon/color changes. Update Firestore and UI state together.
+- **Routing**: Dynamic navigation to Canvas pages via `router.push({ name: 'Canvas', params: { id: node.key } })`. In views, get params via `useRoute()`.
 
 ## Developer Workflows
-- **Install dependencies:** `npm install`
-- **Start dev server:** `npm run dev`
-- **Build for production:** `npm run build`
-- **Lint code:** `npm run lint`
-- No test scripts or test directories detected; testing is not currently integrated.
+- Install: `npm install`
+- Dev server: `npm run dev`
+- Build: `npm run build`
+- Lint: `npm run lint`
+- No built-in tests; add test scripts if needed.
 
-## Patterns & Conventions
-- Components use the `<script setup>` syntax for composition API.
-- Service modules (e.g., `NodeService.js`) encapsulate API/data logic.
-- Views import components and services as needed; keep logic in services, not views.
-- Pinia stores are used for state; mutations and actions are defined in store files.
-- Routing is centralized in `src/router/index.js`.
-- Firebase is initialized in `src/firebase.js` and imported where needed.
+## Project-Specific Conventions
+- Always use `type` for distinguishing folders/files, not icon names.
+- CRUD actions should update both Firestore and local UI state.
+- Error handling: log errors to console, check document existence before update/delete.
+- Use `expandedKeys`, `selectedKey`, and `hover` for UI state in trees.
+- All new nodes should be added with `isPending` flag and finalized on rename.
 
 ## Integration Points
-- **Firebase:** Used for authentication and possibly data storage. See `src/firebase.js` and auth views.
-- **Pinia:** State management, see `src/stores/counter.js`.
-- **Vite:** Handles build and dev server; config in `vite.config.js`.
-- **ESLint:** Config in `eslint.config.js`.
+- **Firebase**: All data and auth flows go through Firestore/Auth. See `src/firebase.js` and usages in components.
+- **Pinia**: State management for global/shared state.
+- **PrimeVue**: UI components (Tree, Button, Rating, Sidebar, etc.).
+- **Iconify**: For icons in tree and dialogs.
 
-## Example: Adding a New Page
-1. Create a new view in `src/views/` (e.g., `NewPage.vue`).
-2. Add a route in `src/router/index.js`.
-3. Import and use components from `src/components/` as needed.
+## Example: Add Canvas Node
+```js
+const canvasData = { type: 'file', label: 'New Canvas', ... }
+const id = await addCanvas(canvasData)
+node.key = id
+```
 
-## Example: Using a Service
-- Import service in a component or view:
-  ```js
-  import NodeService from '../service/NodeService'
-  NodeService.someMethod()
-  ```
+## Example: Navigate to Canvas
+```js
+router.push({ name: 'Canvas', params: { id: node.key } })
+```
 
 ## Additional Notes
-- No custom build/test/debug commands beyond standard Vite scripts.
-- No legacy Vue 2 syntax; use Vue 3 composition API.
+- No legacy Vue 2 syntax; use Vue 3 composition API only.
 - Static assets go in `public/`.
-
----
-For questions about architecture or conventions, see this file and `README.md`.
+- For architecture/conventions, see this file and `README.md`.

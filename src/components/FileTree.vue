@@ -71,7 +71,13 @@
 
 
                           <Icon :icon="slotProps.node.icon" :style="{ color: slotProps.node.iconColor || '#fff', fontSize: '1.2em' }" />
-                          <span v-if="editingKey !== slotProps.node.key">{{ slotProps.node.label }}</span>
+                          <span
+                            v-if="editingKey !== slotProps.node.key"
+                            @click="onNodeClick(slotProps.node)"
+                            style="cursor: pointer"
+                          >
+  {{ slotProps.node.label }}
+</span>
 
 
                           
@@ -176,6 +182,8 @@ import { NodeService } from '@/service/NodeService';
 import SidebarCog from './SidebarCog.vue';
 import SidebarTrash from './SidebarTrash.vue';
 
+import { useRouter } from 'vue-router'
+
 import { Icon } from '@iconify/vue'
 
 
@@ -208,7 +216,7 @@ const onTreeClick = (event) => {
     selectedKey.value = {};
 };
 
-
+const router = useRouter()
 
 const editingKey = ref(null);
 const renameInput = ref(null);
@@ -300,6 +308,12 @@ async function updateRating(node) {
 }
 
 // --- Metodai ---
+
+function onNodeClick(node) {
+  if (node.type === 'file') {
+    router.push({ name: 'Canvas', params: { id: node.key } })
+  }
+}
 
 function openIconPicker(node) {
   selectedNode.value = node
