@@ -1,26 +1,16 @@
-import { defineConfig, globalIgnores } from 'eslint/config'
-import globals from 'globals'
-import js from '@eslint/js'
-import pluginVue from 'eslint-plugin-vue'
-import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
+import js from "@eslint/js";
+import globals from "globals";
+import tseslint from "typescript-eslint";
+import pluginVue from "eslint-plugin-vue";
+import json from "@eslint/json";
+import css from "@eslint/css";
+import { defineConfig } from "eslint/config";
 
 export default defineConfig([
-  {
-    name: 'app/files-to-lint',
-    files: ['**/*.{js,mjs,jsx,vue}'],
-  },
-
-  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
-
-  {
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-      },
-    },
-  },
-
-  js.configs.recommended,
-  ...pluginVue.configs['flat/essential'],
-  skipFormatting,
-])
+  { files: ["**/*.{js,mjs,cjs,ts,mts,cts,vue}"], plugins: { js }, extends: ["js/recommended"], languageOptions: { globals: globals.browser } },
+  tseslint.configs.recommended,
+  pluginVue.configs["flat/essential"],
+  { files: ["**/*.vue"], languageOptions: { parserOptions: { parser: tseslint.parser } } },
+  { files: ["**/*.json"], plugins: { json }, language: "json/json", extends: ["json/recommended"] },
+  { files: ["**/*.css"], plugins: { css }, language: "css/css", extends: ["css/recommended"] },
+]);

@@ -15,7 +15,9 @@
   },
   "dependencies": {
     "@iconify/vue": "^5.0.0",
+    "@panzoom/panzoom": "^4.6.0",
     "@primeuix/themes": "^1.2.3",
+    "draggable-resizable-vue3": "^1.0.94-beta",
     "firebase": "^12.2.1",
     "pinia": "^3.0.3",
     "primeicons": "^7.0.0",
@@ -24,15 +26,18 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.31.0",
+    "@eslint/css": "^0.11.0",
+    "@eslint/js": "^9.35.0",
+    "@eslint/json": "^0.13.2",
     "@nuxt/icon": "^2.0.0",
     "@primevue/auto-import-resolver": "^4.3.7",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/eslint-config-prettier": "^10.2.0",
-    "eslint": "^9.31.0",
+    "eslint": "^9.35.0",
     "eslint-plugin-vue": "~10.3.0",
-    "globals": "^16.3.0",
+    "globals": "^16.4.0",
     "prettier": "3.6.2",
+    "typescript-eslint": "^8.43.0",
     "unplugin-vue-components": "^29.0.0",
     "vite": "^7.0.6",
     "vite-plugin-vue-devtools": "^8.0.0"

@@ -63,9 +63,9 @@ app.use(PrimeVue, {
     }
 });
 
+const pinia = createPinia();
+app.use(pinia)
 
-
-app.use(createPinia())
 app.use(router)
 
 app.component('Tree', Tree).component('Button', Button);
