@@ -17,6 +17,8 @@
     "@iconify/vue": "^5.0.0",
     "@panzoom/panzoom": "^4.6.0",
     "@primeuix/themes": "^1.2.3",
+    "@tiptap/starter-kit": "^3.4.4",
+    "@tiptap/vue-3": "^3.4.4",
     "draggable-resizable-vue3": "^1.0.94-beta",
     "firebase": "^12.2.1",
     "konva": "^10.0.2",

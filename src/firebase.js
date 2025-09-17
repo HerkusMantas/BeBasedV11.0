@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, onSnapshot, doc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 
@@ -17,28 +17,3 @@ export const db = getFirestore(app);
 export const storage = getStorage(app);
 export const auth = getAuth(app);
 
-// --- NAUJOS FUNKCIJOS ---
-
-// Prenumeruoja realaus laiko atnaujinimus iš 'shapes' subkolekcijos
-export const onShapesSnapshot = (canvasId, callback) => {
-  const shapesCollection = collection(db, 'canvases', canvasId, 'shapes');
-  return onSnapshot(shapesCollection, callback);
-};
-
-// Prideda naują elementą į subkolekciją
-export const addShape = async (canvasId, shapeData) => {
-  const shapesCollection = collection(db, 'canvases', canvasId, 'shapes');
-  return await addDoc(shapesCollection, shapeData);
-};
-
-// Atnaujina esamo elemento duomenis
-export const updateShape = async (canvasId, shapeId, shapeData) => {
-  const shapeDoc = doc(db, 'canvases', canvasId, 'shapes', shapeId);
-  await updateDoc(shapeDoc, shapeData);
-};
-
-// Ištrina elementą
-export const deleteShape = async (canvasId, shapeId) => {
-  const shapeDoc = doc(db, 'canvases', canvasId, 'shapes', shapeId);
-  await deleteDoc(shapeDoc);
-};
