@@ -6,7 +6,15 @@ KOMANDOS
 >    git add .; git commit -m "Atnaujinta: iconpicker failas"; git push   
 
 
+>   git checkout v11.2.0-stable   STABILI VERSIJA BET CANVAS SENAS
 
+>   git add .
+    git commit -m "Nauja veikianti versija"
+    git tag v11.3.0-stable
+    git push
+    git push origin v11.3.0-stable
+
+>
 
 KA DB DARAU
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
