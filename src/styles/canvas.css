@@ -1,0 +1,121 @@
+/*--------------------CANVAS CONTAINER--------------------*/
+
+.canvas-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 1rem;
+  width: 100%;
+  min-height: 80vh;
+  background: #18181b;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+
+
+/*--------------------CANVAS TOOLBAR--------------------*/
+
+.canvas-toolbar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.canvas-toolbar .p-button {
+  background: #18181b !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 12px;
+  font-weight: bold;
+  padding: 0px 10px !important;
+  font-size: 0.95rem !important;
+}
+
+/*--------------------CANVAS AREA--------------------*/
+
+.konva-stage {
+  background: #23272f;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  margin-bottom: 1rem;
+  outline: 2px solid #374151;
+}
+
+/*--------------------SHAPE STYLES--------------------*/
+
+.konva-rect {
+  stroke: #22c55e;
+  stroke-width: 2;
+  fill: #18181b;
+  cursor: move;
+  transition: box-shadow 0.2s;
+}
+.konva-rect.selected {
+  stroke: #eab308;
+  box-shadow: 0 0 0 2px #eab308;
+}
+
+.konva-circle {
+  stroke: #ef4444;
+  stroke-width: 2;
+  fill: #23272f;
+  cursor: move;
+}
+.konva-circle.selected {
+  stroke: #fb923c;
+}
+
+/*--------------------CANVAS BUTTONS--------------------*/
+
+.canvas-action-btn {
+  background: #374151 !important;
+  color: #fff !important;
+  border-radius: 8px;
+  border: none;
+  padding: 6px 16px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-right: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.canvas-action-btn:last-child {
+  margin-right: 0;
+}
+.canvas-action-btn:hover {
+  background: #22c55e !important;
+  color: #18181b !important;
+}
+
+/*--------------------UNDO/REDO BUTTONS--------------------*/
+
+.undo-btn[disabled], .redo-btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/*--------------------CANVAS INFO--------------------*/
+
+.canvas-info {
+  color: #a1a1aa;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+/*--------------------RESPONSIVE--------------------*/
+
+@media (max-width: 900px) {
+  .canvas-container {
+    padding: 0.5rem;
+    min-height: 60vh;
+  }
+  .konva-stage {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+}

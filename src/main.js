@@ -19,6 +19,15 @@ import CheckboxGroup from 'primevue/checkboxgroup';
 
 
 
+import VueKonva from 'vue-konva';
+
+
+
+
+
+
+
+
 import Tree from 'primevue/tree';
 
 import App from './App.vue';
@@ -63,6 +72,8 @@ app.use(PrimeVue, {
     }
 });
 
+app.use(VueKonva); // Pridedame Konva
+
 const pinia = createPinia();
 app.use(pinia)
 
@@ -70,5 +81,6 @@ app.use(router)
 
 app.component('Tree', Tree).component('Button', Button);
 
+app.use(VueKonva); // Pridedame Konva
 
 app.mount('#app')

@@ -19,10 +19,12 @@
     "@primeuix/themes": "^1.2.3",
     "draggable-resizable-vue3": "^1.0.94-beta",
     "firebase": "^12.2.1",
+    "konva": "^10.0.2",
     "pinia": "^3.0.3",
     "primeicons": "^7.0.0",
     "primevue": "^4.3.9",
     "vue": "^3.5.18",
+    "vue-konva": "^3.2.6",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {

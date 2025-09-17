@@ -42,6 +42,7 @@
 import { ref } from 'vue'
 import Dialog from 'primevue/dialog'
 import { Icon } from '@iconify/vue'
+import '../styles/iconpicker.css'
 
 const iconList = [
   'mdi:home',
@@ -64,36 +65,3 @@ function selectIcon(icon) {
 }
 </script>
 
-<style>
-.icon-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-top: 16px;
-}
-.icon-option {
-  font-size: 2rem;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 8px;
-  transition: background 0.2s;
-}
-.icon-option:hover {
-  background: #eee;
-}
-.color-palette {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-.color-option {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 2px solid #ccc;
-}
-.color-option.selected {
-  border: 2px solid #1976d2;
-}
-</style>

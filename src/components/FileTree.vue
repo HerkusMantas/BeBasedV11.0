@@ -184,6 +184,8 @@ import SidebarTrash from './SidebarTrash.vue';
 
 import { useRouter } from 'vue-router'
 
+import '../styles/filetree.css'
+
 import { Icon } from '@iconify/vue'
 
 

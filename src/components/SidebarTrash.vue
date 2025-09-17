@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { collection, getDocs, setDoc, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '@/firebase';
+import '../styles/sidebar.css'
 
 // Kintamasis šiukšlinės elementams saugoti
 const trashItems = ref([]);
@@ -102,33 +103,3 @@ async function deleteForever(item) {
   </div>
 </template>
 
-<style scoped>
-.trash-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-}
-.item-label {
-  font-weight: bold;
-}
-.item-actions button {
-  margin-left: 8px;
-  cursor: pointer;
-  background: none;
-  border: none;
-  padding: 4px;
-}
-.button-restore {
-  color: #22c55e; /* green-500 */
-}
-.button-delete {
-  color: #ef4444; /* red-500 */
-}
-.empty-trash-message {
-  color: #6b7280; /* gray-500 */
-  padding: 20px;
-  text-align: center;
-}
-</style>

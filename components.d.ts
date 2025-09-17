@@ -10,6 +10,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     Button: typeof import('primevue/button')['default']
     CanvasElement: typeof import('./src/components/CanvasElement.vue')['default']
+    CanvasToolBar: typeof import('./src/components/CanvasToolBar.vue')['default']
     Checkbox: typeof import('primevue/checkbox')['default']
     ContextMenuCanvas: typeof import('./src/components/ContextMenuCanvas.vue')['default']
     ContextMenuFileTree: typeof import('./src/components/ContextMenuFileTree.vue')['default']
