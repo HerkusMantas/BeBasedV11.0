@@ -25,9 +25,24 @@
 <script setup>
 import { ref } from 'vue';
 
+import { onMounted } from 'vue';
 const position = ref({ x: 100, y: 40 });
+
+onMounted(() => {
+  // Centruojam X pagal frame plotį, Y paliekam kaip buvo (pvz. 40)
+  const frame = document.querySelector('.canvas-frame');
+  const toolbar = document.querySelector('.floating-toolbar');
+  if (frame && toolbar) {
+    const frameRect = frame.getBoundingClientRect();
+    const toolbarRect = toolbar.getBoundingClientRect();
+    position.value.x = (frameRect.width - toolbarRect.width) / 2;
+    // position.value.y paliekam kaip buvo (pvz. 40)
+  }
+});
 const dragging = ref(false);
 const dragOffset = ref({ x: 0, y: 0 });
+let frameRect = null;
+let edgePanInterval = null;
 
 const tools = [
   { name: 'Add Text', icon: '🅰️' },
@@ -36,6 +51,9 @@ const tools = [
 ];
 
 function startHandleDrag(e) {
+  // Gauti frame ribas
+  const frame = document.querySelector('.canvas-frame');
+  if (frame) frameRect = frame.getBoundingClientRect();
   dragging.value = true;
   const clientX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
   const clientY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
@@ -57,8 +75,40 @@ function onDrag(e) {
   if (!dragging.value) return;
   const clientX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
   const clientY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
-  position.value.x = clientX - dragOffset.value.x;
-  position.value.y = clientY - dragOffset.value.y;
+  const toolbar = document.querySelector('.floating-toolbar');
+  if (frameRect && toolbar) {
+    const toolbarRect = toolbar.getBoundingClientRect();
+    const minX = 0;
+    const minY = 0;
+    const maxX = frameRect.width - toolbarRect.width;
+    const maxY = frameRect.height - toolbarRect.height;
+    const edgeZone = 24;
+    let panX = 0, panY = 0;
+    if (clientX - frameRect.left < edgeZone) panX = -6;
+    else if (frameRect.right - clientX < edgeZone) panX = 6;
+    if (clientY - frameRect.top < edgeZone) panY = -6;
+    else if (frameRect.bottom - clientY < edgeZone) panY = 6;
+    if ((panX !== 0 || panY !== 0) && !edgePanInterval) {
+      edgePanInterval = setInterval(() => {
+        position.value.x = Math.max(minX, Math.min(maxX, position.value.x + panX));
+        position.value.y = Math.max(minY, Math.min(maxY, position.value.y + panY));
+      }, 16);
+    } else if (panX === 0 && panY === 0 && edgePanInterval) {
+      clearInterval(edgePanInterval);
+      edgePanInterval = null;
+    }
+    // Jei pelė išeina už frame ribų, prikabinam toolbar prie krašto
+    let newX = clientX - dragOffset.value.x;
+    let newY = clientY - dragOffset.value.y;
+    if (clientX < frameRect.left) newX = minX;
+    else if (clientX > frameRect.right) newX = maxX;
+    else newX = Math.max(minX, Math.min(maxX, newX));
+    if (clientY < frameRect.top) newY = minY;
+    else if (clientY > frameRect.bottom) newY = maxY;
+    else newY = Math.max(minY, Math.min(maxY, newY));
+    position.value.x = newX;
+    position.value.y = newY;
+  }
 }
 
 function stopDrag() {
@@ -67,6 +117,10 @@ function stopDrag() {
   window.removeEventListener('mouseup', stopDrag);
   window.removeEventListener('touchmove', onDrag);
   window.removeEventListener('touchend', stopDrag);
+  if (edgePanInterval) {
+    clearInterval(edgePanInterval);
+    edgePanInterval = null;
+  }
 }
 function handleToolClick(name) {
   if (name === 'Add Text') {

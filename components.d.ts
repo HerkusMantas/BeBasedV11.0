@@ -25,6 +25,8 @@ declare module 'vue' {
     SidebarTrash: typeof import('./src/components/SidebarTrash.vue')['default']
     TabPanel: typeof import('primevue/tabpanel')['default']
     TabView: typeof import('primevue/tabview')['default']
+    TagModal: typeof import('./src/components/TagModal.vue')['default']
+    TextEditToolbar: typeof import('./src/components/TextEditToolbar.vue')['default']
     Tree: typeof import('primevue/tree')['default']
   }
 }
